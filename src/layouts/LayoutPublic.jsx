@@ -7,8 +7,12 @@ const LayoutPublic = ({children}) => {
     return (
         <div className=' flex flex-col justify-between h-screen'>
             <Navbar />
-            <main className= 'h-full overflow'>{children}</main>             
-            <Footer/>              
+            <div className= 'h-full overflow-y-scroll'>
+            <main className = 'h-full '> {children}
+             
+            </main>
+            <Footer/> 
+            </div>
         </div>
     )
 }
