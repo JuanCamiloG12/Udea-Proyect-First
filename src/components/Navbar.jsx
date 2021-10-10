@@ -2,9 +2,9 @@ import React from 'react'
 
 const Navbar = () => {
     return (
-        <div>
-            Navbar
-        </div>
+        <nav className='bg-gray-600 text-white'>
+           NAvbar
+        </nav>
     )
 }
 

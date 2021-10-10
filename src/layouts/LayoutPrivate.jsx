@@ -1,12 +1,14 @@
 import React from 'react'
-import Sidebar from '../components/Sidebar'
+import Footer from '../components/Footer'
+import Navbar from '../components/Navbar'
+
 
 const LayoutPrivate = ({children}) => {
     return (
-        <div className= "flex w-screen h-screen ">
-            <Sidebar/>
+        <div>
+            <Navbar />
             <main className ='flex w-full overflow-y-scroll'>{children}</main>            
-                       
+            <Footer />           
             
         </div>
     )
