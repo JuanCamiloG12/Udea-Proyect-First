@@ -7,7 +7,7 @@ const LayoutPrivate = ({children}) => {
     return (
         <div>
             <Navbar />
-            <main className ='flex w-full overflow-y-scroll'>{children}</main>            
+            <main className ='flex items-center justify-center bg-red-400 py-16 mt-16'>{children}</main>            
             <Footer />           
             
         </div>

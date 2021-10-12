@@ -3,7 +3,7 @@ import Cards from '../../components/Cards'
 
 const Prendas = () => {
     return (
-        <div>
+        <div className='h-screen'>
            Administracion de  Prendas
            <Cards />
         </div>

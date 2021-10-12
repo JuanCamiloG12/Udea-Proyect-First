@@ -2,7 +2,7 @@ import React from 'react'
 
 const Cards = () => {
     return (
-        <div className='bg-white'>
+        <div className='bg-indigo-300'>
             <div>
                 <img src="" alt="" />
             </div>
