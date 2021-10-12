@@ -3,7 +3,7 @@ import React from 'react'
 
 const Sidebar = () => {
     return (
-        <div className="w-72">
+        <div className='bg-gray-600'>
             Sidebar
         </div>
     )
