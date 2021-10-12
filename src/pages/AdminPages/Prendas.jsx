@@ -1,10 +1,7 @@
-<<<<<<< HEAD
-import React from 'react'
+
 import Cards from '../../components/Cards'
-=======
 import React, {useEffect} from 'react'
 
->>>>>>> e662b4d59ed68ef31d1cd498dcb22dbbe7fe430b
 
 const Prendas = () => {
     /*
@@ -20,11 +17,10 @@ const Prendas = () => {
 
 
     return (
-<<<<<<< HEAD
         <div className='h-screen'>
            Administracion de  Prendas
            <Cards />
-=======
+           
         <div className= 'mt-6 max-w-4xl p-10 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800 '>
             <div className = 'mt-6 '> 
            <h2>Creacion de prendas</h2>
@@ -55,7 +51,7 @@ const Prendas = () => {
         Enviar Datos
     </button>
     </div>   
->>>>>>> e662b4d59ed68ef31d1cd498dcb22dbbe7fe430b
+        </div>
         </div>
     )
 }
