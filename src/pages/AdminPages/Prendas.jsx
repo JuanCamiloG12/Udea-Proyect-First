@@ -1,33 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-const prendasBackend = [
-  {
-    identificador: "1",
-    producto: "Tenis",
-    valor: 150000,
-    estado: "Disponible",
-  },
-  {
-    identificador: "2",
-    producto: "jean",
-    valor: 100000,
-    estado: "No disponible",
-  },
-  {
-    identificador: "3",
-    producto: "Camisa",
-    valor: 80000,
-    estado: "Disponible",
-  },
-  {
-    identificador: "4",
-    producto: "Medias",
-    valor: 20000,
-    estado: "No Disponible",
-  },
-];
+import axios from "axios";
+import { nanoid } from 'nanoid';
 
 const Prendas = () => {
   const [mostrarTabla, setMostrarTabla] = useState(true);
@@ -36,10 +11,24 @@ const Prendas = () => {
 
   useEffect(() => {
     //obtener lista prendas desde el backend
-    setPrendas(prendasBackend);
-  }, []);
+    const obtenerPrendas = async () => {
+      const options = { method: "GET", url: "http://localhost:5000/prendas" };
+      await axios
+        .request(options)
+        .then(function (response) {
+          setPrendas(response.data);
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+    };
+    if (mostrarTabla) {
+      obtenerPrendas();
+    }
+  }, [mostrarTabla]);
 
   useEffect(() => {
+    //Para cambiar el texto del boton
     if (mostrarTabla) {
       setTextoBoton("Crear nuevo producto");
     } else {
@@ -49,18 +38,21 @@ const Prendas = () => {
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-start p-8">
-      <h2 className="text-center text-3xl font-extrabold text-gray-800">
-        Pagina administracion de productos
-      </h2>
-      <button
-        type="button"
-        onClick={() => {
-          setMostrarTabla(!mostrarTabla);
-        }}
-        className="text-white bg-indigo-500 p-5 rounded-full"
-      >
-        {textoBoton}
-      </button>
+      <div className='flex flex-col w-full'>
+        <h2 className="text-center text-3xl font-extrabold text-gray-800">
+          Pagina administracion de productos
+        </h2>
+        <button
+          type="button"
+          onClick={() => {
+            setMostrarTabla(!mostrarTabla);
+          }}
+          className="text-white bg-indigo-500 p-5 rounded-full m-6 w-28 self-end"
+        >
+          {textoBoton}
+        </button>
+      </div>
+
       {mostrarTabla ? (
         <TablaPrendas listaPrendas={prendas} />
       ) : (
@@ -68,7 +60,6 @@ const Prendas = () => {
           setMostrarTabla={setMostrarTabla}
           listaPrendas={prendas}
           setPrendas={setPrendas}
-          
         />
       )}
       <ToastContainer position="bottom-center" autoClose={5000} />
@@ -85,32 +76,39 @@ const TablaPrendas = ({ listaPrendas }) => {
   }, [listaPrendas]);
 
   return (
-    <div>
+    <div className="flex flex-col items-center justify-center w-full">
       <h2 className="text-center text-2xl font-extrabold text-gray-800 p-5">
         Todos los productos
       </h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Identificador</th>
-            <th>Producto</th>
-            <th>Valor unitario</th>
-            <th>Estado</th>
-          </tr>
-        </thead>
-        <tbody>
-          {listaPrendas.map((prendas) => {
-            return (
-              <tr>
-                <td className="text-center">{prendas.identificador}</td>
-                <td className="text-center">{prendas.producto}</td>
-                <td className="text-center">{prendas.valor}</td>
-                <td className="text-center">{prendas.estado}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      <div>
+        <table className="tabla">
+          <thead>
+            <tr>
+              <th>Identificador</th>
+              <th>Producto</th>
+              <th>Valor unitario</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {listaPrendas.map((prendas) => {
+              return (
+                <tr key={nanoid()} >
+                  <td>{prendas.identificador}</td>
+                  <td>{prendas.producto}</td>
+                  <td>{prendas.valor}</td>
+                  <td>{prendas.estado}</td>
+                  <td>
+                  <i className="far fa-edit"></i>
+                  <i className="fas fa-trash-alt"></i>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
@@ -122,17 +120,41 @@ const FormularioCreacionPrendas = ({
 }) => {
   const form = useRef(null);
 
-  const submitForm = (e) => {
+  const submitForm = async (e) => {
+    //cada vez que se use el boton agregar
     e.preventDefault();
-    const fd= new FormData(form.current);
+    const fd = new FormData(form.current);
 
     const nuevaPrenda = {};
-    fd.forEach((value,key) => {
+    fd.forEach((value, key) => {
       nuevaPrenda[key] = value;
     });
+
+    const options = {
+      method: "POST",
+      url: "http://localhost:5000/prendas/nuevo",
+      headers: { "Content-Type": "application/json" },
+      data: {
+        identificador: nuevaPrenda.identificador,
+        producto: nuevaPrenda.producto,
+        valor: nuevaPrenda.valor,
+        estado: nuevaPrenda.estado,
+      },
+    };
+
+    await axios
+      .request(options)
+      .then(function (response) {
+        console.log(response.data);
+        toast.success("producto agregado con exito");
+      })
+      .catch(function (error) {
+        console.error(error);
+        toast.error("error creando producto");
+      });
+
     setMostrarTabla(true);
-    toast.success("vehiculo agregado con exito");
-    setPrendas([...listaPrendas,nuevaPrenda]);
+    setPrendas([...listaPrendas, nuevaPrenda]); //Para agregar el producto nuevo
   };
 
   return (
@@ -140,7 +162,7 @@ const FormularioCreacionPrendas = ({
       <h2 className="text-2xl font-extrabold text-gray-800">
         Crear nuevo vehiculo
       </h2>
-      <form ref={form} onSubmit={submitForm} className='flex flex-col'>
+      <form ref={form} onSubmit={submitForm} className="flex flex-col">
         <label className="flex flex-col" htmlFor="identificador">
           Identificador
           <input
@@ -151,7 +173,7 @@ const FormularioCreacionPrendas = ({
             required
           />
         </label>
-        
+
         <label className="flex flex-col" htmlFor="producto">
           Descripcion producto
           <input
@@ -175,11 +197,11 @@ const FormularioCreacionPrendas = ({
           />
         </label>
 
-        <label className='flex flex-col' htmlFor='estado'>
+        <label className="flex flex-col" htmlFor="estado">
           Estado
           <select
-            className='bg-gray-50 border border-gray-600 p-2 rounded-lg m-2'
-            name='estado'
+            className="bg-gray-50 border border-gray-600 p-2 rounded-lg m-2"
+            name="estado"
             required
             defaultValue={0}
           >
@@ -192,8 +214,8 @@ const FormularioCreacionPrendas = ({
         </label>
 
         <button
-          type='submit'
-          className='col-span-2 bg-green-400 p-2 rounded-full shadow-md hover:bg-green-600 text-white'
+          type="submit"
+          className="col-span-2 bg-green-400 p-2 rounded-full shadow-md hover:bg-green-600 text-white"
         >
           Guardar producto
         </button>
@@ -201,8 +223,5 @@ const FormularioCreacionPrendas = ({
     </div>
   );
 };
-
-        
-        
 
 export default Prendas;
