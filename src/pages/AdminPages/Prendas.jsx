@@ -2,30 +2,44 @@ import React, { useEffect, useState, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { nanoid } from 'nanoid';
+import { nanoid } from "nanoid";
 
 const Prendas = () => {
   const [mostrarTabla, setMostrarTabla] = useState(true);
   const [textoBoton, setTextoBoton] = useState("Crear nuevo producto");
   const [prendas, setPrendas] = useState([]);
+  const [ejecutarConsulta, setEjecutarConsulta] = useState(true);
+
+  const obtenerPrendas = async () => {
+    const options = { method: "GET", url: "http://localhost:5000/prendas" };
+    await axios
+      .request(options)
+      .then(function (response) {
+        setPrendas(response.data);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+      setEjecutarConsulta(false);
+  };
+
+  
+
+  useEffect(() => {
+    if (ejecutarConsulta) {
+      obtenerPrendas();
+    }
+      
+  }, [ejecutarConsulta]);
+
 
   useEffect(() => {
     //obtener lista prendas desde el backend
-    const obtenerPrendas = async () => {
-      const options = { method: "GET", url: "http://localhost:5000/prendas" };
-      await axios
-        .request(options)
-        .then(function (response) {
-          setPrendas(response.data);
-        })
-        .catch(function (error) {
-          console.error(error);
-        });
-    };
     if (mostrarTabla) {
-      obtenerPrendas();
+      setEjecutarConsulta(true);
     }
   }, [mostrarTabla]);
+
 
   useEffect(() => {
     //Para cambiar el texto del boton
@@ -38,7 +52,7 @@ const Prendas = () => {
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-start p-8">
-      <div className='flex flex-col w-full'>
+      <div className="flex flex-col w-full">
         <h2 className="text-center text-3xl font-extrabold text-gray-800">
           Pagina administracion de productos
         </h2>
@@ -54,7 +68,10 @@ const Prendas = () => {
       </div>
 
       {mostrarTabla ? (
-        <TablaPrendas listaPrendas={prendas} />
+        <TablaPrendas
+          listaPrendas={prendas}
+          setEjecutarConsulta={setEjecutarConsulta}
+        />
       ) : (
         <FormularioCreacionPrendas
           setMostrarTabla={setMostrarTabla}
@@ -67,49 +84,205 @@ const Prendas = () => {
   );
 };
 
-const TablaPrendas = ({ listaPrendas }) => {
+const TablaPrendas = ({ listaPrendas, setEjecutarConsulta }) => {
+  const [busqueda, setBusqueda] = useState("");
+  const [prendasFiltradas, setPrendasFiltradas] = useState(listaPrendas);
+
   useEffect(() => {
-    console.log(
-      "este es el estado de las prendas en el componente de tabla",
-      listaPrendas
+    setPrendasFiltradas(
+      listaPrendas.filter((elemento) => {
+        return JSON.stringify(elemento)
+          .toLowerCase()
+          .includes(busqueda.toLowerCase());
+      })
     );
-  }, [listaPrendas]);
+  }, [busqueda, listaPrendas]);
 
   return (
     <div className="flex flex-col items-center justify-center w-full">
+      <input
+        value={busqueda}
+        onChange={(e) => setBusqueda(e.target.value)}
+        placeholder="Buscar"
+        className="border 2 border-gray-700 px-3 py-1 self-start rounded-md"
+      />
       <h2 className="text-center text-2xl font-extrabold text-gray-800 p-5">
         Todos los productos
       </h2>
-      <div>
-        <table className="tabla">
-          <thead>
-            <tr>
-              <th>Identificador</th>
-              <th>Producto</th>
-              <th>Valor unitario</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {listaPrendas.map((prendas) => {
-              return (
-                <tr key={nanoid()} >
-                  <td>{prendas.identificador}</td>
-                  <td>{prendas.producto}</td>
-                  <td>{prendas.valor}</td>
-                  <td>{prendas.estado}</td>
-                  <td>
-                  <i className="far fa-edit"></i>
-                  <i className="fas fa-trash-alt"></i>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+
+      <table className="tabla">
+        <thead>
+          <tr>
+            <th>Identificador</th>
+            <th>Producto</th>
+            <th>Valor unitario</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {prendasFiltradas.map((prendas) => {
+            return (
+              <FilaPrendas
+                key={nanoid()}
+                prendas={prendas}
+                setEjecutarConsulta={setEjecutarConsulta}
+              />
+            );
+          })}
+        </tbody>
+      </table>
     </div>
+  );
+};
+
+const FilaPrendas = ({ prendas, setEjecutarConsulta }) => {
+  const [edit, setEdit] = useState(false);
+  const [infoNuevaPrenda, setInfoNuevaPrenda] = useState({
+    identificador: prendas.identificador,
+    producto: prendas.producto,
+    valor: prendas.valor,
+    estado: prendas.estado,
+  });
+
+  const actualizarPrenda = async () => {
+    console.log(infoNuevaPrenda);
+
+    //enviar informacion al backend de
+    const options = {
+      method: "PATCH",
+      url: "http://localhost:5000/prendas/editar",
+      headers: { "Content-Type": "application/json" },
+      data: {
+        ...infoNuevaPrenda,
+        id: prendas._id,
+      },
+    };
+
+    await axios
+      .request(options)
+      .then(function (response) {
+        console.log(response.data);
+        toast.success("Producto editado exitosamente");
+        setEdit(false); //para cambiar el icono nuevamente del edit
+        setEjecutarConsulta(true);
+      })
+      .catch(function (error) {
+        console.error(error);
+        toast.error("Error editando producto");
+      });
+  };
+
+  const eliminarPrenda = async () => {
+    const options = {
+      method: "DELETE",
+      url: "http://localhost:5000/prendas/eliminar",
+      headers: { "Content-Type": "application/json" },
+      data: { id: prendas._id },
+    };
+
+    await axios
+      .request(options)
+      .then(function (response) {
+        console.log(response.data);
+        toast.success("Producto eliminado con exito");
+        setEjecutarConsulta(true);
+      })
+      .catch(function (error) {
+        console.error(error);
+        toast.error("Error eliminando producto");
+      });
+  };
+  return (
+    <tr>
+      {edit ? (
+        <>
+          <td>
+            <input
+              className="bg-gray-50 border border-gray-600 p-2 rounded-lg m-2"
+              type="text"
+              value={infoNuevaPrenda.identificador}
+              onChange={(e) =>
+                setInfoNuevaPrenda({
+                  ...infoNuevaPrenda,
+                  identificador: e.target.value,
+                })
+              }
+            />
+          </td>
+          <td>
+            <input
+              className="bg-gray-50 border border-gray-600 p-2 rounded-lg m-2"
+              type="text"
+              value={infoNuevaPrenda.producto}
+              onChange={(e) =>
+                setInfoNuevaPrenda({
+                  ...infoNuevaPrenda,
+                  producto: e.target.value,
+                })
+              }
+            />
+          </td>
+          <td>
+            <input
+              className="bg-gray-50 border border-gray-600 p-2 rounded-lg m-2"
+              type="number"
+              value={infoNuevaPrenda.valor}
+              onChange={(e) =>
+                setInfoNuevaPrenda({
+                  ...infoNuevaPrenda,
+                  valor: e.target.value,
+                })
+              }
+            />
+          </td>
+          <td>
+            <select
+              className="bg-gray-50 border border-gray-600 p-2 rounded-lg m-2"
+              defaultValue={infoNuevaPrenda.estado}
+              onChange={(e) =>
+                setInfoNuevaPrenda({
+                  ...infoNuevaPrenda,
+                  estado: e.target.value,
+                })
+              }
+            >
+              <option>Disponible</option>
+              <option>No disponible</option>
+            </select>
+          </td>
+        </>
+      ) : (
+        <>
+          <td>{prendas.identificador}</td>
+          <td>{prendas.producto}</td>
+          <td>{prendas.valor}</td>
+          <td>{prendas.estado}</td>
+        </>
+      )}
+
+      <td>
+        <div className="flex w-full justify-around">
+          {edit ? (
+            <i
+              onClick={() => actualizarPrenda()}
+              class="far fa-check-square text-green-500 hover:text-green-200"
+            ></i>
+          ) : (
+            <i
+              //Renderizacion condicional para cambiar el boton
+              onClick={() => setEdit(!edit)}
+              className="far fa-edit text-blue-700 hover:text-blue-300"
+            ></i>
+          )}
+
+          <i
+            onClick={() => eliminarPrenda()}
+            className="fas fa-trash-alt text-gray-700 hover:text-gray-300"
+          ></i>
+        </div>
+      </td>
+    </tr>
   );
 };
 
