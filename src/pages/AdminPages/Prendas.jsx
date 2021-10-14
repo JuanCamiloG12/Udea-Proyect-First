@@ -20,18 +20,14 @@ const Prendas = () => {
       .catch(function (error) {
         console.error(error);
       });
-      setEjecutarConsulta(false);
+    setEjecutarConsulta(false);
   };
-
-  
 
   useEffect(() => {
     if (ejecutarConsulta) {
       obtenerPrendas();
     }
-      
   }, [ejecutarConsulta]);
-
 
   useEffect(() => {
     //obtener lista prendas desde el backend
@@ -39,7 +35,6 @@ const Prendas = () => {
       setEjecutarConsulta(true);
     }
   }, [mostrarTabla]);
-
 
   useEffect(() => {
     //Para cambiar el texto del boton
@@ -110,14 +105,14 @@ const TablaPrendas = ({ listaPrendas, setEjecutarConsulta }) => {
         Todos los productos
       </h2>
 
-      <table className="tabla">
+      <table className= " w-full items-justify-left border-2">
         <thead>
-          <tr>
-            <th>Identificador</th>
-            <th>Producto</th>
-            <th>Valor unitario</th>
-            <th>Estado</th>
-            <th>Acciones</th>
+          <tr >
+            <th className="text-left border-gray-800 border-2 py-3 bg-green-400 text-white">Identificador</th>
+            <th  className="text-left border-gray-800 border-2 py-3 bg-green-400 text-white">Producto</th>
+            <th  className="text-left border-gray-800 border-2 py-3 bg-green-400 text-white">Valor unitario</th>
+            <th  className="text-left border-gray-800 border-2 py-3 bg-green-400 text-white">Estado</th>
+            <th  className="text-left border-gray-800 border-2 py-3 bg-green-400 text-white">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -139,7 +134,8 @@ const TablaPrendas = ({ listaPrendas, setEjecutarConsulta }) => {
 const FilaPrendas = ({ prendas, setEjecutarConsulta }) => {
   const [edit, setEdit] = useState(false);
   const [infoNuevaPrenda, setInfoNuevaPrenda] = useState({
-    identificador: prendas.identificador,
+    // identificador: prendas.identificador,
+    id: prendas._id,
     producto: prendas.producto,
     valor: prendas.valor,
     estado: prendas.estado,
@@ -197,19 +193,7 @@ const FilaPrendas = ({ prendas, setEjecutarConsulta }) => {
     <tr>
       {edit ? (
         <>
-          <td>
-            <input
-              className="bg-gray-50 border border-gray-600 p-2 rounded-lg m-2"
-              type="text"
-              value={infoNuevaPrenda.identificador}
-              onChange={(e) =>
-                setInfoNuevaPrenda({
-                  ...infoNuevaPrenda,
-                  identificador: e.target.value,
-                })
-              }
-            />
-          </td>
+          <td>{infoNuevaPrenda.id} </td>
           <td>
             <input
               className="bg-gray-50 border border-gray-600 p-2 rounded-lg m-2"
@@ -254,14 +238,14 @@ const FilaPrendas = ({ prendas, setEjecutarConsulta }) => {
         </>
       ) : (
         <>
-          <td>{prendas.identificador}</td>
-          <td>{prendas.producto}</td>
-          <td>{prendas.valor}</td>
-          <td>{prendas.estado}</td>
+          <td className="text-left border-gray-800 border-2 bg-white">{prendas._id}</td>
+          <td className="text-left border-gray-800 border-2 bg-white">{prendas.producto}</td>
+          <td className="text-left border-gray-800 border-2 bg-white">{prendas.valor}</td>
+          <td className="text-left border-gray-800 border-2 bg-white">{prendas.estado}</td>
         </>
       )}
 
-      <td>
+      <td className="border-gray-800 border-2 bg-white" >
         <div className="flex w-full justify-around">
           {edit ? (
             <i
@@ -308,7 +292,7 @@ const FormularioCreacionPrendas = ({
       url: "http://localhost:5000/prendas/nuevo",
       headers: { "Content-Type": "application/json" },
       data: {
-        identificador: nuevaPrenda.identificador,
+        // identificador: nuevaPrenda.identificador,
         producto: nuevaPrenda.producto,
         valor: nuevaPrenda.valor,
         estado: nuevaPrenda.estado,
@@ -336,7 +320,7 @@ const FormularioCreacionPrendas = ({
         Crear nuevo vehiculo
       </h2>
       <form ref={form} onSubmit={submitForm} className="flex flex-col">
-        <label className="flex flex-col" htmlFor="identificador">
+        {/* <label className="flex flex-col" htmlFor="identificador">
           Identificador
           <input
             name="identificador"
@@ -345,7 +329,7 @@ const FormularioCreacionPrendas = ({
             placeholder="Id. producto"
             required
           />
-        </label>
+        </label> */}
 
         <label className="flex flex-col" htmlFor="producto">
           Descripcion producto
