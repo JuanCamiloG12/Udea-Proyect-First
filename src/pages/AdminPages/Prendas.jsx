@@ -1,8 +1,14 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+//import axios from "axios";
 import { nanoid } from "nanoid";
+import {
+  obtenerPrendas,
+  crearPrendas,
+  editarPrendas,
+  eliminarPrendas
+} from "../../utils/api";
 
 const Prendas = () => {
   const [mostrarTabla, setMostrarTabla] = useState(true);
@@ -10,23 +16,19 @@ const Prendas = () => {
   const [prendas, setPrendas] = useState([]);
   const [ejecutarConsulta, setEjecutarConsulta] = useState(true);
 
-  const obtenerPrendas = async () => {
-    const options = { method: "GET", url: "http://localhost:5000/prendas" };
-    await axios
-      .request(options)
-      .then(function (response) {
-        setPrendas(response.data);
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
-    setEjecutarConsulta(false);
-  };
-
   useEffect(() => {
     if (ejecutarConsulta) {
-      obtenerPrendas();
+      obtenerPrendas(
+        (response) => {
+          setPrendas(response.data);
+          setEjecutarConsulta(false); //mirar SI ESTA BIEN PUESTO
+        },
+        (error) => {
+          console.error(error);
+        }
+      );
     }
+    setEjecutarConsulta(false); //mirar SI ESTA BIEN PUESTO
   }, [ejecutarConsulta]);
 
   useEffect(() => {
@@ -105,14 +107,24 @@ const TablaPrendas = ({ listaPrendas, setEjecutarConsulta }) => {
         Todos los productos
       </h2>
 
-      <table className= " w-full items-justify-left border-2">
+      <table className=" w-full items-justify-left border-2">
         <thead>
-          <tr >
-            <th className="text-left border-gray-800 border-2 py-3 bg-green-400 text-white">Identificador</th>
-            <th  className="text-left border-gray-800 border-2 py-3 bg-green-400 text-white">Producto</th>
-            <th  className="text-left border-gray-800 border-2 py-3 bg-green-400 text-white">Valor unitario</th>
-            <th  className="text-left border-gray-800 border-2 py-3 bg-green-400 text-white">Estado</th>
-            <th  className="text-left border-gray-800 border-2 py-3 bg-green-400 text-white">Acciones</th>
+          <tr>
+            <th className="text-left border-gray-800 border-2 py-3 bg-green-400 text-white">
+              Identificador
+            </th>
+            <th className="text-left border-gray-800 border-2 py-3 bg-green-400 text-white">
+              Producto
+            </th>
+            <th className="text-left border-gray-800 border-2 py-3 bg-green-400 text-white">
+              Valor unitario
+            </th>
+            <th className="text-left border-gray-800 border-2 py-3 bg-green-400 text-white">
+              Estado
+            </th>
+            <th className="text-left border-gray-800 border-2 py-3 bg-green-400 text-white">
+              Acciones
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -145,50 +157,37 @@ const FilaPrendas = ({ prendas, setEjecutarConsulta }) => {
     console.log(infoNuevaPrenda);
 
     //enviar informacion al backend de
-    const options = {
-      method: "PATCH",
-      url: "http://localhost:5000/prendas/editar",
-      headers: { "Content-Type": "application/json" },
-      data: {
-        ...infoNuevaPrenda,
-        id: prendas._id,
-      },
-    };
 
-    await axios
-      .request(options)
-      .then(function (response) {
+    await editarPrendas(
+      { ...infoNuevaPrenda, id: prendas._id },
+      (response) => {
         console.log(response.data);
         toast.success("Producto editado exitosamente");
         setEdit(false); //para cambiar el icono nuevamente del edit
         setEjecutarConsulta(true);
-      })
-      .catch(function (error) {
+      },
+      (error) => {
         console.error(error);
         toast.error("Error editando producto");
-      });
+      }
+    );
   };
 
   const eliminarPrenda = async () => {
-    const options = {
-      method: "DELETE",
-      url: "http://localhost:5000/prendas/eliminar",
-      headers: { "Content-Type": "application/json" },
-      data: { id: prendas._id },
-    };
-
-    await axios
-      .request(options)
-      .then(function (response) {
+    await eliminarPrendas(
+      { id: prendas._id },
+      (response) => {
         console.log(response.data);
         toast.success("Producto eliminado con exito");
         setEjecutarConsulta(true);
-      })
-      .catch(function (error) {
+      },
+      (error) => {
         console.error(error);
         toast.error("Error eliminando producto");
-      });
+      }
+    );
   };
+   
   return (
     <tr>
       {edit ? (
@@ -238,14 +237,22 @@ const FilaPrendas = ({ prendas, setEjecutarConsulta }) => {
         </>
       ) : (
         <>
-          <td className="text-left border-gray-800 border-2 bg-white">{prendas._id}</td>
-          <td className="text-left border-gray-800 border-2 bg-white">{prendas.producto}</td>
-          <td className="text-left border-gray-800 border-2 bg-white">{prendas.valor}</td>
-          <td className="text-left border-gray-800 border-2 bg-white">{prendas.estado}</td>
+          <td className="text-left border-gray-800 border-2 bg-white">
+            {prendas._id}
+          </td>
+          <td className="text-left border-gray-800 border-2 bg-white">
+            {prendas.producto}
+          </td>
+          <td className="text-left border-gray-800 border-2 bg-white">
+            {prendas.valor}
+          </td>
+          <td className="text-left border-gray-800 border-2 bg-white">
+            {prendas.estado}
+          </td>
         </>
       )}
 
-      <td className="border-gray-800 border-2 bg-white" >
+      <td className="border-gray-800 border-2 bg-white">
         <div className="flex w-full justify-around">
           {edit ? (
             <i
@@ -287,28 +294,21 @@ const FormularioCreacionPrendas = ({
       nuevaPrenda[key] = value;
     });
 
-    const options = {
-      method: "POST",
-      url: "http://localhost:5000/prendas/nuevo",
-      headers: { "Content-Type": "application/json" },
-      data: {
-        // identificador: nuevaPrenda.identificador,
+    await crearPrendas(
+      {
         producto: nuevaPrenda.producto,
         valor: nuevaPrenda.valor,
         estado: nuevaPrenda.estado,
       },
-    };
-
-    await axios
-      .request(options)
-      .then(function (response) {
+      (response) => {
         console.log(response.data);
         toast.success("producto agregado con exito");
-      })
-      .catch(function (error) {
+      },
+      (error) => {
         console.error(error);
         toast.error("error creando producto");
-      });
+      }
+    );
 
     setMostrarTabla(true);
     setPrendas([...listaPrendas, nuevaPrenda]); //Para agregar el producto nuevo
@@ -359,10 +359,10 @@ const FormularioCreacionPrendas = ({
           <select
             className="bg-gray-50 border border-gray-600 p-2 rounded-lg m-2"
             name="estado"
+            defaultValue=""
             required
-            defaultValue={0}
           >
-            <option disabled value={0}>
+            <option disabled value="">
               Seleccione una opción
             </option>
             <option>Disponible</option>
