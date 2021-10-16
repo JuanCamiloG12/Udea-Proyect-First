@@ -10,9 +10,14 @@ import LayoutPrivate from './layouts/LayoutPrivate';
 import LayoutAuth from './layouts/LayoutAuth'
 import Clientes from './pages/AdminPages/Clientes';
 import Prendas from './pages/AdminPages/Prendas';
+import { Auth0Provider } from "@auth0/auth0-react";
 
 function App() {
   return (
+    <Auth0Provider
+    domain="misiontic-ventasprendas.us.auth0.com"
+    clientId="1TUycs7XYgveAahju7NwofT3JdSkRWnP "
+    redirectUri={window.location.origin} >
     <div >
       <Router>
         <Switch>
@@ -52,6 +57,7 @@ function App() {
       </Router>
       
     </div>
+    </Auth0Provider>
   );
 }
 
