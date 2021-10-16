@@ -10,13 +10,14 @@ import LayoutPrivate from './layouts/LayoutPrivate';
 import LayoutAuth from './layouts/LayoutAuth'
 import Clientes from './pages/AdminPages/Clientes';
 import Prendas from './pages/AdminPages/Prendas';
+import Ventas from './pages/AdminPages/Ventas';
 
 function App() {
   return (
     <div >
       <Router>
         <Switch>
-          <Route path= {['/AdminPages','/AdminPages/Clientes', '/AdminPages/Prendas']}>
+          <Route path= {['/AdminPages','/AdminPages/Clientes', '/AdminPages/Prendas', '/AdminPages/Ventas']}>
             <LayoutPrivate>
               <Switch>
                 <Route path = '/AdminPages/Clientes'>
@@ -24,7 +25,10 @@ function App() {
                 </Route>
                 <Route path = '/AdminPages/Prendas'>
                   <Prendas/>
-                </Route>                
+                </Route>
+                <Route path = '/AdminPages/Ventas'>
+                  <Ventas/>
+                </Route>                 
                 <Route path = '/AdminPages'>
                   <Admin/>
                 </Route>

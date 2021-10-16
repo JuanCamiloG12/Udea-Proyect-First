@@ -5,7 +5,6 @@ const Prendas = () => {
     return (
         <div className='h-screen'>
            Administracion de  Prendas
-           <Cards />
         </div>
     )
 }
