@@ -10,7 +10,8 @@ const PrivateRoute = ({ children }) => {
       const accessToken = await getAccessTokenSilently({
         audience: 'Api-autenticacion-ventaPrendas-mintic',
       });
-      console.log(accessToken);
+      localStorage.setItem("token",accessToken);
+      
     };
     if(isAuthenticated){
       fetchAuth0Token();
