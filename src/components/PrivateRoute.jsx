@@ -1,9 +1,23 @@
-import React from "react";
+import{React,useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Link } from "react-router-dom";
 
 const PrivateRoute = ({ children }) => {
-  const { isAuthenticated, isLoading,loginWithRedirect } = useAuth0();
+  const { isAuthenticated, isLoading,loginWithRedirect,getAccessTokenSilently } = useAuth0();
+  useEffect(() => {
+    
+    const fetchAuth0Token = async ()=> {
+      const accessToken = await getAccessTokenSilently({
+        audience: 'Api-autenticacion-ventaPrendas-mintic',
+      });
+      console.log(accessToken);
+    };
+    if(isAuthenticated){
+      fetchAuth0Token();
+    }
+  
+  }, [isAuthenticated,getAccessTokenSilently])
+
   if (isLoading) return <div class=" flex justify-center items-center">
   <div class="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
 </div>;

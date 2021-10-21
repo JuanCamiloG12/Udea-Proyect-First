@@ -17,7 +17,9 @@ function App() {
     <Auth0Provider
     domain="misiontic-ventasprendas.us.auth0.com"
     clientId="1TUycs7XYgveAahju7NwofT3JdSkRWnP "
-    redirectUri={window.location.origin} >
+    redirectUri={window.location.origin} 
+    audience='Api-autenticacion-ventaPrendas-mintic'>
+      
     <div >
       <Router>
         <Switch>
