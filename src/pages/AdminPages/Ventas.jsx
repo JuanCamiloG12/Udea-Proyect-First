@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState} from "react";
 import { obtenerVentas } from "../../utils/api";
 import { nanoid } from "nanoid";
 
@@ -116,7 +116,8 @@ const Ventas = () => {
                         {el.producto.valor}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        Total
+                        
+                        {parseFloat(el.cantidad) * parseFloat(el.producto.valor)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <a href="#" className="text-indigo-600 hover:text-indigo-900">Editar</a>
