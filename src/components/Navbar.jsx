@@ -69,7 +69,6 @@ const Navbar = () => {
 
               <button
                 onClick={() => loginWithRedirect()}
-                //type="button"
                 className="flex items-center focus:outline-none"
                 aria-label="toggle profile dropdown"
               >

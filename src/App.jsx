@@ -11,6 +11,8 @@ import LayoutAuth from "./layouts/LayoutAuth";
 import Clientes from "./pages/AdminPages/Clientes";
 import Prendas from "./pages/AdminPages/Prendas";
 import { Auth0Provider } from "@auth0/auth0-react";
+import Crearventas from "./pages/AdminPages/Crearventas";
+
 
 function App() {
   return (
@@ -24,13 +26,17 @@ function App() {
           <Switch>
             <Route
               path={[
-                "/AdminPages",
+                "/AdminPages/Crearventas",
                 "/AdminPages/Clientes",
                 "/AdminPages/Prendas",
+                "/AdminPages",
               ]}
             >
               <LayoutPrivate>
                 <Switch>
+                  <Route path="/AdminPages/Crearventas"> 
+                    <Crearventas />
+                  </Route>
                   <Route path="/AdminPages/Clientes">
                     <Clientes />
                   </Route>
