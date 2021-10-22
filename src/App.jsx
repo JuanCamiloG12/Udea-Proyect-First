@@ -16,9 +16,9 @@ function App() {
   return (
     <Auth0Provider
     domain="misiontic-ventasprendas.us.auth0.com"
-    clientId="1TUycs7XYgveAahju7NwofT3JdSkRWnP "
-    redirectUri={window.location.origin} 
-    audience='Api-autenticacion-ventaPrendas-mintic'>
+    clientId="1TUycs7XYgveAahju7NwofT3JdSkRWnP"
+    redirectUri={window.location.origin}
+    >
       
     <div >
       <Router>
@@ -59,7 +59,9 @@ function App() {
       </Router>
       
     </div>
-    </Auth0Provider>
+    </Auth0Provider>    
+    
+    
   );
 }
 
