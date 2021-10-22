@@ -11,6 +11,7 @@ import {
 } from "../../utils/api";
 
 const Prendas = () => {
+<<<<<<< HEAD
   const [mostrarTabla, setMostrarTabla] = useState(true);
   const [textoBoton, setTextoBoton] = useState("Crear nuevo producto");
   const [prendas, setPrendas] = useState([]);
@@ -271,6 +272,11 @@ const FilaPrendas = ({ prendas, setEjecutarConsulta }) => {
             onClick={() => eliminarPrenda()}
             className="fas fa-trash-alt text-gray-700 hover:text-gray-300"
           ></i>
+=======
+    return (
+        <div className='h-screen'>
+           Administracion de  Prendas
+>>>>>>> 98d3980b924ff6f1b027e682a84dc5519ef2871e
         </div>
       </td>
     </tr>

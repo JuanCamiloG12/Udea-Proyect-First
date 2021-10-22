@@ -87,7 +87,7 @@ const Crearventas = () => {
             {prendas.map((el) => {
               return (
                 <option key={nanoid()} value={el._id}>
-                  {`${el.producto}, Valor unitario: ${el.valor}`}{" "}
+                  {`${el.producto}, Valor unitario: ${el.valor}`}
                 </option>
               );
             })}
@@ -149,7 +149,7 @@ const Crearventas = () => {
             {vendedores.map((el) => {
               return (
                 <option key={nanoid()} value={el._id}>
-                  {`${el.name} ${el.lastname}`}{" "}
+                  {`${el.name} ${el.lastname}`}
                 </option>
               );
             })}
