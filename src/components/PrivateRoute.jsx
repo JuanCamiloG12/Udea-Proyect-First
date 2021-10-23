@@ -4,7 +4,7 @@ import { obtenerDatosUsuario } from '../utils/api';
 
 // 1. PEDIR TOKEN A AUTH0
 const PrivateRoute = ({children}) => {
-  const { user, isAuthenticated, isLoading,getAccessTokenSilently } = useAuth0();
+  const { isAuthenticated, isLoading,getAccessTokenSilently } = useAuth0();
   useEffect(()=>{
     const fetchAuth0Token = async ()=> {
       const accessToken= await getAccessTokenSilently({
