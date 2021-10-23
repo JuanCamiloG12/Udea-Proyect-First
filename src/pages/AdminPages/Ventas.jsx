@@ -121,6 +121,7 @@ const FilaVenta = ({ el, setEjecutarConsulta }) => {
   };
 
   return (
+           
     <tr>
       {edit ? (
         <>
@@ -278,6 +279,10 @@ const FilaVenta = ({ el, setEjecutarConsulta }) => {
         ></i>
       </td>
     </tr>
+    
+ 
+    
+    
   );
 };
 

@@ -1,9 +1,12 @@
 import React from "react";
 import logotipo from "../media/Logo.png";
 import { useAuth0 } from "@auth0/auth0-react";
+import { Link } from "react-router-dom";
+
 
 const Navbar = () => {
   const { loginWithRedirect } = useAuth0();
+  const { logout } = useAuth0();
   return (
     <nav className="bg-white shadow dark:bg-gray-800 fixed top-0 inset-x-0 h-16 opacity-90">
       <div className="container px-2 py-4 mx-auto">
@@ -37,14 +40,32 @@ const Navbar = () => {
           {/* Mobile Menu open: "block", Menu closed: "hidden" */}
           <div className="flex-1 md:flex md:items-center md:justify-between">
             <div className="flex flex-col -mx-4 md:flex-row md:items-center md:mx-8">
-              {/* <a href="#" className="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700">Productos</a>
-                            <a href="#" className="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700">Ventas</a>
-                            <a href="#" className="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700">Sobre Nosotros</a>
-                            <a href="#" className="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700">Contactenos</a> */}
+              <Link
+                to="/AdminPages/Ventas"
+                className="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700"
+              >
+                Ventas{" "}
+              </Link>
+              <Link
+                to="/AdminPages/Prendas"
+                className="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700"
+              >
+                Productos{" "}
+              </Link>
+              <Link
+                to="/AdminPages/Crearventas"
+                className="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700"
+              >
+                Crear Ventas{" "}
+              </Link>
+               
+                        
+
             </div>
 
             <div className="flex items-center mt-4 md:mt-0">
               <button
+                onClick={() => logout({ returnTo: window.location.origin })}
                 className="hidden mx-4 text-gray-600 md:block dark:text-gray-200 hover:text-gray-700 dark:hover:text-gray-400 focus:text-gray-700 dark:focus:text-gray-400 focus:outline-none"
                 aria-label="show notifications"
               >
@@ -92,5 +113,6 @@ const Navbar = () => {
     </nav>
   );
 };
+
 
 export default Navbar;

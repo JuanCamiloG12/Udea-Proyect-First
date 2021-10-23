@@ -5,15 +5,12 @@ import Navbar from '../components/Navbar'
 
 const LayoutPublic = ({children}) => {
     return (
-        <div className=' flex flex-col justify-between h-screen'>
-            <Navbar />
-            <div className= 'h-full overflow-y-scroll'>
-            <main className = 'h-full '> {children}
-             
-            </main>
-            <Footer/> 
+        <div >
+           <Navbar />
+            <main className ='flex items-center justify-center bg-blue-100 py-16 mt-16'>{children}</main>            
+            <Footer />
             </div>
-        </div>
+        
     )
 }
 

@@ -1,13 +1,10 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 
 const Index = () => {
     return (
-        <div>
+        <div className="flex flex-col h-screen">
             Hola, desde el index 
-            <button>
-                <Link to ='/Login'>Login</Link>
-            </button>
+            
         </div>
     )
 }
