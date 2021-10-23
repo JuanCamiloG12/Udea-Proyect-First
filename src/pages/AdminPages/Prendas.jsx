@@ -11,6 +11,7 @@ import {
 } from "../../utils/api";
 
 const Prendas = () => {
+  
   const [mostrarTabla, setMostrarTabla] = useState(true);
   const [textoBoton, setTextoBoton] = useState("Crear nuevo producto");
   const [prendas, setPrendas] = useState([]);
@@ -257,7 +258,7 @@ const FilaPrendas = ({ prendas, setEjecutarConsulta }) => {
           {edit ? (
             <i
               onClick={() => actualizarPrenda()}
-              class="far fa-check-square text-green-500 hover:text-green-200"
+              className="far fa-check-square text-green-500 hover:text-green-200"
             ></i>
           ) : (
             <i
