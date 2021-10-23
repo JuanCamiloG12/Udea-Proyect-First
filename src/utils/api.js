@@ -6,7 +6,7 @@ const getToken = ()=>{
 export const obtenerPrendas = async (successCallback, errorCallback) => { 
   const options = {
    method: "GET",
-   url: "https://rocky-reef-45746.herokuapp.com/prendas" ,
+   url: "https://safe-lake-18043.herokuapp.com/prendas" ,
    headers:{
      Authorization: getToken(),
    },
@@ -17,7 +17,7 @@ export const obtenerPrendas = async (successCallback, errorCallback) => {
 export const crearPrendas = async (data, successCallback, errorCallback) => {
   const options = {
     method: "POST",
-    url: "https://rocky-reef-45746.herokuapp.com/prendas/nuevo",
+    url: "https://safe-lake-18043.herokuapp.com/prendas/nuevo",
     headers: { "Content-Type": "application/json", Authorization: getToken(),  },
     data,
   };
@@ -27,7 +27,7 @@ export const crearPrendas = async (data, successCallback, errorCallback) => {
 export const editarPrendas = async (data, successCallback, errorCallback) => {
   const options = {
     method: "PATCH",
-    url: "https://rocky-reef-45746.herokuapp.com/prendas/editar",
+    url: "https://safe-lake-18043.herokuapp.com/prendas/editar",
     headers: { "Content-Type": "application/json",Authorization: getToken(), },
     data, //: {...infoNuevaPrenda,id: prendas._id},
   };
@@ -37,7 +37,7 @@ export const editarPrendas = async (data, successCallback, errorCallback) => {
 export const eliminarPrendas = async (data, successCallback, errorCallback) => {
   const options = {
     method: "DELETE",
-    url: "https://rocky-reef-45746.herokuapp.com/prendas/eliminar",
+    url: "https://safe-lake-18043.herokuapp.com/prendas/eliminar",
     headers: { "Content-Type": "application/json", Authorization: getToken(), },
     data, //: { id: prendas._id },
   };
@@ -48,7 +48,7 @@ export const eliminarPrendas = async (data, successCallback, errorCallback) => {
 export const obtenerUsuarios = async (successCallback, errorCallback) => {
   const options = {
     method: 'GET',
-    url: 'https://rocky-reef-45746.herokuapp.com/usuarios',
+    url: 'https://safe-lake-18043.herokuapp.com/usuarios',
     headers: {
       Authorization: getToken(),
     },
@@ -59,7 +59,7 @@ export const obtenerUsuarios = async (successCallback, errorCallback) => {
 export const obtenerDatosUsuario = async (successCallback, errorCallback) => {
   const options = {
     method: 'GET',
-    url: 'https://rocky-reef-45746.herokuapp.com/usuarios/self',
+    url: 'https://safe-lake-18043.herokuapp.com/usuarios/self',
     headers: {
       Authorization: getToken(), // 3. enviarle el token a backend
     },
@@ -70,7 +70,7 @@ export const obtenerDatosUsuario = async (successCallback, errorCallback) => {
 export const editarUsuario = async (id, data, successCallback, errorCallback) => {
   const options = {
     method: 'PATCH',
-    url: `https://rocky-reef-45746.herokuapp.com/usuarios/${id}/`,
+    url: `https://safe-lake-18043.herokuapp.com/usuarios/${id}/`,
     headers: { 'Content-Type': 'application/json', Authorization: getToken() },
     data,
   };
@@ -85,7 +85,7 @@ export const editarUsuario = async (id, data, successCallback, errorCallback) =>
 export const crearVenta = async (data, successCallback, errorCallback) => {
   const options = {
     method: "POST",
-    url: "https://rocky-reef-45746.herokuapp.com/ventas/nuevo",
+    url: "https://safe-lake-18043.herokuapp.com/ventas/nuevo",
     headers: { "Content-Type": "application/json",Authorization: getToken(), },
     data,
   };
@@ -93,7 +93,7 @@ export const crearVenta = async (data, successCallback, errorCallback) => {
 };
 
 export const obtenerVentas = async (successCallback, errorCallback) => {
-  const options = { method: "GET", url: "https://rocky-reef-45746.herokuapp.com/ventas",
+  const options = { method: "GET", url: "https://safe-lake-18043.herokuapp.com/ventas",
   headers:{
     Authorization: getToken(),
   },
@@ -105,7 +105,7 @@ export const obtenerVentas = async (successCallback, errorCallback) => {
 export const editarVenta = async (data, successCallback, errorCallback) => {
   const options = {
     method: "PATCH",
-    url: "https://rocky-reef-45746.herokuapp.com/ventas/editar",
+    url: "https://safe-lake-18043.herokuapp.com/ventas/editar",
     headers: { "Content-Type": "application/json",Authorization: getToken(), },
     data,
   };
@@ -115,7 +115,7 @@ export const editarVenta = async (data, successCallback, errorCallback) => {
 export const eliminarVenta = async (data, successCallback, errorCallback) => {
   const options = {
     method: "DELETE",
-    url: "https://rocky-reef-45746.herokuapp.com/ventas/eliminar",
+    url: "https://safe-lake-18043.herokuapp.com/ventas/eliminar",
     headers: { "Content-Type": "application/json",Authorization: getToken(), },
     data,
   };
