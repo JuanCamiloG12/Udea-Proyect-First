@@ -18,7 +18,7 @@ function App() {
     <Auth0Provider
       domain="misiontic-ventasprendas.us.auth0.com"
       clientId="1TUycs7XYgveAahju7NwofT3JdSkRWnP"
-      redirectUri={window.location.origin}
+      redirectUri='https://rocky-reef-45746.herokuapp.com/AdminPages'
     >
       <div>
         <Router>
