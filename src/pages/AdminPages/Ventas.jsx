@@ -6,12 +6,14 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Ventas = () => {
   const [ventas, setVentas] = useState([]);
+  const [ejecutarConsulta, setEjecutarConsulta] = useState(true);
 
   useEffect(() => {
     const consultarVentas = async () => {
       await obtenerVentas(
         (response) => {
           setVentas(response.data);
+          setEjecutarConsulta(false);
         },
         (error) => {
           console.error(error);
@@ -21,7 +23,7 @@ const Ventas = () => {
 
     consultarVentas();
     //console.log("ventas", ventas);
-  }, []);
+  }, [ejecutarConsulta]);
 
   return (
     <div className="flex flex-col h-screen">
@@ -64,7 +66,7 @@ const Ventas = () => {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {ventas.map((el) => {
-                  return <FilaVenta key={nanoid()} el={el} />;
+                  return <FilaVenta key={nanoid()} el={el} setEjecutarConsulta={setEjecutarConsulta} />;
                 })}
               </tbody>
             </table>
@@ -76,7 +78,7 @@ const Ventas = () => {
   );
 };
 
-const FilaVenta = ({ el }) => {
+const FilaVenta = ({ el, setEjecutarConsulta }) => {
   const [edit, setEdit] = useState(false);
   //esta es la nueva informacion de la venta
   const [infoNuevaVenta, setInfoNuevaVenta] = useState({
@@ -94,6 +96,7 @@ const FilaVenta = ({ el }) => {
         console.log(response.data);
         toast.success("Venta editada exitosamente");
         setEdit(false); //para cambiar el icono nuevamente del edit
+        setEjecutarConsulta(true);
       },
       (error) => {
         console.error(error);
@@ -108,6 +111,7 @@ const FilaVenta = ({ el }) => {
       (response) => {
         console.log(response.data);
         toast.success("Producto eliminado con exito");
+        setEjecutarConsulta(true);
       },
       (error) => {
         console.error(error);
