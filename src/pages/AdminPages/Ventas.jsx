@@ -1,6 +1,8 @@
-import React, { useEffect, useState} from "react";
-import { obtenerVentas } from "../../utils/api";
+import React, { useEffect, useState } from "react";
+import { eliminarVenta, obtenerVentas } from "../../utils/api";
 import { nanoid } from "nanoid";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Ventas = () => {
   const [ventas, setVentas] = useState([]);
@@ -18,8 +20,22 @@ const Ventas = () => {
     };
 
     consultarVentas();
-    console.log("ventas", ventas);
+    //console.log("ventas", ventas);
   }, []);
+
+  const deleteVentas = async () => {
+    await eliminarVenta(
+      { id: ventas._id },
+      (response) => {
+        console.log(response.data);
+        toast.success("Venta eliminada con exito");
+      },
+      (error) => {
+        console.error(error);
+        toast.error("Error eliminando venta");
+      }
+    );
+  };
 
   return (
     <div className="flex flex-col h-screen">
@@ -52,6 +68,9 @@ const Ventas = () => {
                   </th>
                   <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Total
+                  </th>
+                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Acciones
                   </th>
 
                   <th className="relative px-6 py-3">
@@ -102,13 +121,10 @@ const Ventas = () => {
                             <div className="text-sm font-medium text-gray-900">
                               {el.producto.producto}
                             </div>
-                            
                           </div>
                         </div>
                       </td>
 
-                      
-                      
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {el.cantidad}
                       </td>
@@ -116,14 +132,18 @@ const Ventas = () => {
                         {el.producto.valor}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        
-                        {parseFloat(el.cantidad) * parseFloat(el.producto.valor)}
+                        {parseFloat(el.cantidad) *
+                          parseFloat(el.producto.valor)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <a href="#" className="text-indigo-600 hover:text-indigo-900">Editar</a>
+                        <i class="far fa-check-square text-green-500 hover:text-green-200"></i>
                       </td>
-
-
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <i
+                          onClick={() => deleteVentas()}
+                          className="fas fa-trash-alt text-gray-700 hover:text-gray-300"
+                        ></i>
+                      </td>
                     </tr>
                   );
                 })}
@@ -132,6 +152,7 @@ const Ventas = () => {
           </div>
         </div>
       </div>
+      <ToastContainer position="bottom-center" autoClose={5000} />
     </div>
   );
 };
