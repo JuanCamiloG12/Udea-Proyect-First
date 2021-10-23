@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { eliminarVenta, obtenerVentas } from "../../utils/api";
+import { editarVenta, eliminarVenta, obtenerVentas } from "../../utils/api";
 import { nanoid } from "nanoid";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -22,20 +22,6 @@ const Ventas = () => {
     consultarVentas();
     //console.log("ventas", ventas);
   }, []);
-
-  const deleteVentas = async () => {
-    await eliminarVenta(
-      { id: ventas._id },
-      (response) => {
-        console.log(response.data);
-        toast.success("Venta eliminada con exito");
-      },
-      (error) => {
-        console.error(error);
-        toast.error("Error eliminando venta");
-      }
-    );
-  };
 
   return (
     <div className="flex flex-col h-screen">
@@ -73,79 +59,12 @@ const Ventas = () => {
                     Acciones
                   </th>
 
-                  <th className="relative px-6 py-3">
-                    <span className="sr-only">Edit</span>
-                  </th>
+                  <th className="relative px-6 py-3"></th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {ventas.map((el) => {
-                  return (
-                    <tr key={nanoid()}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {el._id}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {el.fecha}
-                      </td>
-
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">
-                              {`${el.vendedor.name} ${el.vendedor.lastname}`}
-                            </div>
-                            <div className="text-sm text-gray-500">
-                              ID: {el.vendedor._id}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">
-                              {el.name_cliente}
-                            </div>
-                            <div className="text-sm text-gray-500">
-                              ID: {el.id_cliente}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">
-                              {el.producto.producto}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {el.cantidad}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {el.producto.valor}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {parseFloat(el.cantidad) *
-                          parseFloat(el.producto.valor)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <i class="far fa-check-square text-green-500 hover:text-green-200"></i>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <i
-                          onClick={() => deleteVentas()}
-                          className="fas fa-trash-alt text-gray-700 hover:text-gray-300"
-                        ></i>
-                      </td>
-                    </tr>
-                  );
+                  return <FilaVenta key={nanoid()} el={el} />;
                 })}
               </tbody>
             </table>
@@ -154,6 +73,207 @@ const Ventas = () => {
       </div>
       <ToastContainer position="bottom-center" autoClose={5000} />
     </div>
+  );
+};
+
+const FilaVenta = ({ el }) => {
+  const [edit, setEdit] = useState(false);
+  //esta es la nueva informacion de la venta
+  const [infoNuevaVenta, setInfoNuevaVenta] = useState({
+    fecha: el.fecha,
+    name_cliente: el.name_cliente,
+    id_cliente: el.id_cliente,
+    cantidad: el.cantidad,
+  });
+
+  const actualizarVenta = async () => {
+    console.log(infoNuevaVenta);
+    await editarVenta(
+      { ...infoNuevaVenta, id: el._id },
+      (response) => {
+        console.log(response.data);
+        toast.success("Venta editada exitosamente");
+        setEdit(false); //para cambiar el icono nuevamente del edit
+      },
+      (error) => {
+        console.error(error);
+        toast.error("Error editando venta");
+      }
+    );
+  };
+
+  const deleteVenta = async () => {
+    await eliminarVenta(
+      { id: el._id },
+      (response) => {
+        console.log(response.data);
+        toast.success("Producto eliminado con exito");
+      },
+      (error) => {
+        console.error(error);
+        toast.error("Error eliminando producto");
+      }
+    );
+  };
+
+  return (
+    <tr>
+      {edit ? (
+        <>
+          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+            {el._id}
+          </td>
+          <td>
+            <input
+              className="bg-gray-50 border border-gray-600 p-2 rounded-lg m-2"
+              type="date"
+              value={infoNuevaVenta.fecha}
+              onChange={(e) =>
+                setInfoNuevaVenta({ ...infoNuevaVenta, fecha: e.target.value })
+              }
+            />
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap">
+            <div className="flex items-center">
+              <div className="ml-4">
+                <div className="text-sm font-medium text-gray-900">
+                  {`${el.vendedor.name} ${el.vendedor.lastname}`}
+                </div>
+                <div className="text-sm text-gray-500">
+                  ID: {el.vendedor._id}
+                </div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <input
+              className="bg-gray-50 border border-gray-600 p-2 rounded-lg m-2"
+              type="text"
+              value={infoNuevaVenta.name_cliente}
+              onChange={(e) =>
+                setInfoNuevaVenta({
+                  ...infoNuevaVenta,
+                  name_cliente: e.target.value,
+                })
+              }
+            />
+            <input
+              className="bg-gray-50 border border-gray-600 p-2 rounded-lg m-2"
+              type="text"
+              value={infoNuevaVenta.id_cliente}
+              onChange={(e) =>
+                setInfoNuevaVenta({
+                  ...infoNuevaVenta,
+                  id_cliente: e.target.value,
+                })
+              }
+            />
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap">
+            <div className="flex items-center">
+              <div className="ml-4">
+                <div className="text-sm font-medium text-gray-900">
+                  {el.producto.producto}
+                </div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <input
+              className="bg-gray-50 border border-gray-600 p-2 rounded-lg m-2"
+              type="number"
+              value={infoNuevaVenta.cantidad}
+              onChange={(e) =>
+                setInfoNuevaVenta({
+                  ...infoNuevaVenta,
+                  cantidad: e.target.value,
+                })
+              }
+            />
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+            {el.producto.valor}
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+            {parseFloat(el.cantidad) * parseFloat(el.producto.valor)}
+          </td>
+        </>
+      ) : (
+        <>
+          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+            {el._id}
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+            {el.fecha}
+          </td>
+
+          <td className="px-6 py-4 whitespace-nowrap">
+            <div className="flex items-center">
+              <div className="ml-4">
+                <div className="text-sm font-medium text-gray-900">
+                  {`${el.vendedor.name} ${el.vendedor.lastname}`}
+                </div>
+                <div className="text-sm text-gray-500">
+                  ID: {el.vendedor._id}
+                </div>
+              </div>
+            </div>
+          </td>
+
+          <td className="px-6 py-4 whitespace-nowrap">
+            <div className="flex items-center">
+              <div className="ml-4">
+                <div className="text-sm font-medium text-gray-900">
+                  {el.name_cliente}
+                </div>
+                <div className="text-sm text-gray-500">ID: {el.id_cliente}</div>
+              </div>
+            </div>
+          </td>
+
+          <td className="px-6 py-4 whitespace-nowrap">
+            <div className="flex items-center">
+              <div className="ml-4">
+                <div className="text-sm font-medium text-gray-900">
+                  {el.producto.producto}
+                </div>
+              </div>
+            </div>
+          </td>
+
+          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+            {el.cantidad}
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+            {el.producto.valor}
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+            {parseFloat(el.cantidad) * parseFloat(el.producto.valor)}
+          </td>
+        </>
+      )}
+
+      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+        {edit ? (
+          <i
+            onClick={() => actualizarVenta()}
+            className="far fa-check-square text-green-500 hover:text-green-200"
+          ></i>
+        ) : (
+          <i
+            onClick={() => setEdit(!edit)}
+            className="far fa-edit text-blue-700 hover:text-blue-300"
+          ></i>
+        )}
+      </td>
+
+      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+        <i
+          onClick={() => deleteVenta()}
+          className="fas fa-trash-alt text-gray-700 hover:text-gray-300"
+        ></i>
+      </td>
+    </tr>
   );
 };
 

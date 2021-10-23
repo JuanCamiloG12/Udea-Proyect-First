@@ -258,7 +258,7 @@ const FilaPrendas = ({ prendas, setEjecutarConsulta }) => {
           {edit ? (
             <i
               onClick={() => actualizarPrenda()}
-              class="far fa-check-square text-green-500 hover:text-green-200"
+              className="far fa-check-square text-green-500 hover:text-green-200"
             ></i>
           ) : (
             <i

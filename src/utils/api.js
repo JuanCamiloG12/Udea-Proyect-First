@@ -59,6 +59,16 @@ export const obtenerVentas = async (successCallback, errorCallback) => {
   await axios.request(options).then(successCallback).catch(errorCallback);
 };
 
+export const editarVenta = async (data, successCallback, errorCallback) => {
+  const options = {
+    method: "PATCH",
+    url: "http://localhost:5000/ventas/editar",
+    headers: { "Content-Type": "application/json" },
+    data,
+  };
+  await axios.request(options).then(successCallback).catch(errorCallback);
+};
+
 export const eliminarVenta = async (data, successCallback, errorCallback) => {
   const options = {
     method: "DELETE",
