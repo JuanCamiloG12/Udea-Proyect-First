@@ -3,7 +3,7 @@ import React from 'react'
 const Index = () => {
     return (
         <div className="flex flex-col h-screen">
-            Hola, desde el index 
+            Gracias, por su comprensión. 
             
         </div>
     )
