@@ -89,6 +89,7 @@ const FilaVenta = ({ el, setEjecutarConsulta }) => {
   });
 
   const actualizarVenta = async () => {
+
     console.log(infoNuevaVenta);
     await editarVenta(
       { ...infoNuevaVenta, id: el._id },
@@ -142,7 +143,7 @@ const FilaVenta = ({ el, setEjecutarConsulta }) => {
             <div className="flex items-center">
               <div className="ml-4">
                 <div className="text-sm font-medium text-gray-900">
-                  {`${el.vendedor.name} ${el.vendedor.lastname}`}
+                  {`${el.vendedor.name}`}
                 </div>
                 <div className="text-sm text-gray-500">
                   ID: {el.vendedor._id}

@@ -1,4 +1,5 @@
 import axios from "axios";
+
 const getToken = ()=>{
   return `Bearer ${localStorage.getItem('token')}`;
 };
@@ -77,7 +78,7 @@ export const editarUsuario = async (id, data, successCallback, errorCallback) =>
   await axios.request(options).then(successCallback).catch(errorCallback);
 };
 
-//CRUD PARA USUARIOS
+
 
 
 //CRUD PARA VENTAS

@@ -149,7 +149,7 @@ const Crearventas = () => {
             {vendedores.map((el) => {
               return (
                 <option key={nanoid()} value={el._id}>
-                  {`${el.name} ${el.lastname}`}
+                  {`${el.name}`}
                 </option>
               );
             })}
