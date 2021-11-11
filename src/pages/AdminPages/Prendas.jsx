@@ -52,7 +52,7 @@ const Prendas = () => {
     <div className="flex h-full w-full flex-col items-center justify-start p-8">
       <div className="flex flex-col w-full">
         <h2 className="text-center text-3xl font-extrabold text-gray-800">
-          Pagina administracion de productos
+          Pagina administración de productos
         </h2>
         <button
           type="button"
