@@ -116,7 +116,7 @@ const Crearventas = () => {
         </label>
 
         <label className="flex flex-col">
-          <span className="text-2xl font-gray-900">Identificacion cliente</span>
+          <span className="text-2xl font-gray-900">Identificación cliente</span>
           <input
             className="bg-gray-50 border border-gray-600 p-2 rounded-lg m-2"
             type="number"
